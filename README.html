@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FintrackAI - Kendalikan Keuanganmu. Mulai Hari Ini.</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- AOS (Animate On Scroll) Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* === CSS UTAMA === */
+
+        /* 1. Variabel Warna & Reset Global */
+        :root {
+            --light-blue: #3b82f6; /* Biru muda untuk CTA */
+            --pastel-green: #10b981; /* Hijau pastel untuk success/profit */
+            --heading-font: 'Inter', sans-serif;
+            --body-font: 'Inter', sans-serif;
+
+            /* Light Mode */
+            --bg-color-light: #f8fafc; /* Sedikit off-white */
+            --text-color-light: #0f172a; /* Abu-abu tua */
+            --card-color-light: #ffffff;
+            --border-color-light: #e2e8f0;
+            --subtle-text-light: #64748b;
+
+            /* Dark Mode */
+            --bg-color-dark: #020617; /* Biru sangat gelap */
+            --text-color-dark: #e2e8f0; /* Putih keabuan */
+            --card-color-dark: #0f172a; /* Biru tua */
+            --border-color-dark: #1e293b;
+            --subtle-text-dark: #94a3b8;
+
+            --bg-color: var(--bg-color-light);
+            --text-color: var(--text-color-light);
+            --card-color: var(--card-color-light);
+            --border-color: var(--border-color-light);
+            --subtle-text: var(--subtle-text-light);
+        }
+        
+        body.dark-mode {
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-color: var(--card-color-dark);
+            --border-color: var(--border-color-dark);
+            --subtle-text: var(--subtle-text-dark);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--body-font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 100px 0; }
+        h1, h2, h3, h4 { font-family: var(--heading-font); font-weight: 700; color: var(--text-color); }
+        p { color: var(--subtle-text); line-height: 1.7; }
+
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 20px; }
+        .section-subtitle { text-align: center; max-width: 600px; margin: 0 auto 60px auto; font-size: 1.1rem; }
+
+        .btn { display: inline-block; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; }
+        .btn-primary { background-color: var(--light-blue); color: white; }
+        .btn-primary:hover { background-color: #2563eb; transform: translateY(-2px); }
+        .btn-secondary { background-color: transparent; color: var(--text-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background-color: var(--border-color); }
+
+        /* 2. Header & Navbar */
+        #main-header { position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; transition: all 0.4s ease; }
+        #main-header.sticky {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 5px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        body.dark-mode #main-header.sticky { background-color: rgba(2, 6, 23, 0.8); }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .navbar .logo { font-size: 24px; font-weight: 800; color: var(--text-color); text-decoration: none; }
+        .navbar .logo i { color: var(--light-blue); }
+        .nav-menu { display: flex; align-items: center; gap: 30px; }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--light-blue); }
+        .theme-switcher { font-size: 20px; cursor: pointer; color: var(--subtle-text); }
+        #menu-toggle { display: none; font-size: 24px; cursor: pointer; }
+
+        /* 3. Hero Section */
+        #hero { padding-top: 160px; text-align: center; }
+        #hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+        #hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 40px auto; }
+        .hero-cta { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
+        .dashboard-mockup img { max-width: 100%; width: 800px; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+        body.dark-mode .dashboard-mockup img { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); }
+
+        /* 4. Security Bar Section */
+        #security { padding: 30px 0; }
+        .security-content {
+            display: flex; justify-content: center; align-items: center; gap: 30px;
+            background-color: var(--card-color); border: 1px solid var(--border-color);
+            padding: 20px; border-radius: 12px; flex-wrap: wrap;
+        }
+        .security-item { display: flex; align-items: center; gap: 10px; color: var(--subtle-text); font-weight: 500; }
+        .security-item i { color: var(--pastel-green); }
+
+        /* 5. Features Section */
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .feature-card {
+            background-color: var(--card-color); padding: 30px; border: 1px solid var(--border-color);
+            border-radius: 12px; transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07); }
+        body.dark-mode .feature-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
+        .feature-card .icon { font-size: 2.5rem; margin-bottom: 20px; color: var(--light-blue); }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        
+        /* 6. Education Section */
+        #education { background-color: var(--card-color); }
+        .education-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 50px; align-items: start; }
+        .article-card { display: flex; gap: 20px; margin-bottom: 25px; align-items: center; }
+        .article-card img { width: 120px; height: 80px; object-fit: cover; border-radius: 8px; }
+        .article-card h4 { margin-bottom: 5px; }
+        .video-course-card { background-color: var(--bg-color); padding: 20px; border-radius: 12px; }
+        .video-course-card img { width: 100%; border-radius: 8px; margin-bottom: 15px; }
+        .video-course-card h4 { margin-bottom: 10px; }
+
+        /* 7. Tools Section & Kalkulator */
+        .calculator-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
+            background-color: var(--card-color);
+            padding: 50px; border-radius: 20px; border: 1px solid var(--border-color);
+            align-items: center;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input {
+            width: 100%; padding: 12px 15px; border-radius: 8px;
+            border: 1px solid var(--border-color); background-color: var(--bg-color);
+            color: var(--text-color); font-size: 1rem;
+        }
+        .calculator-result { text-align: center; }
+        .calculator-result h3 { font-size: 1.5rem; color: var(--subtle-text); margin-bottom: 10px; }
+        .calculator-result .total-value {
+            font-size: 3.5rem; font-weight: 800; color: var(--pastel-green); margin-bottom: 20px;
+        }
+        .result-details p { margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .result-details p span:last-child { font-weight: 600; }
+        
+        /* 8. Pricing Section */
+        .pricing-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .pricing-card {
+            width: 320px; background-color: var(--card-color); padding: 40px; border-radius: 12px;
+            border: 1px solid var(--border-color); text-align: center;
+        }
+        .pricing-card.premium { border-color: var(--light-blue); }
+        .pricing-card h3 { font-size: 1.25rem; }
+        .pricing-card .price { font-size: 3rem; font-weight: 800; margin: 20px 0; }
+        .pricing-card .price span { font-size: 1rem; font-weight: 500; color: var(--subtle-text); }
+        .pricing-card ul { list-style: none; margin: 30px 0; text-align: left; }
+        .pricing-card ul li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .pricing-card ul li i { color: var(--pastel-green); }
+
+        /* 9. Testimonials Section */
+        .testimonial-carousel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .testimonial-card {
+            background-color: var(--card-color); border: 1px solid var(--border-color);
+            padding: 30px; border-radius: 12px;
+        }
+        .testimonial-card .quote { font-style: italic; margin-bottom: 20px; }
+        .testimonial-author { display: flex; align-items: center; gap: 15px; }
+        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; }
+
+        /* 10. Footer & Newsletter */
+        #newsletter { background-color: var(--card-color); }
+        .newsletter-content {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+            background-color: var(--light-blue); color: white;
+            padding: 60px; border-radius: 20px;
+        }
+        .newsletter-content h2 { color: white; font-size: 2rem; }
+        .newsletter-content p { color: rgba(255,255,255,0.8); }
+        .newsletter-content img { max-width: 150px; }
+        .newsletter-form { display: flex; margin-top: 20px; }
+        .newsletter-form input {
+            width: 100%; padding: 12px 20px; border-radius: 8px 0 0 8px; border: none;
+            font-size: 1rem;
+        }
+        .newsletter-form button { border-radius: 0 8px 8px 0; background-color: #0f172a; }
+        footer { padding-top: 60px; text-align: center; }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 30px; margin-top: 40px; }
+
+        /* 11. Responsive Design */
+        @media (max-width: 992px) {
+            .nav-menu {
+                display: none; position: absolute; top: 100%; left: 0; right: 0; width: 90%;
+                margin: 10px auto; background-color: var(--card-color); flex-direction: column;
+                padding: 20px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); gap: 0;
+            }
+            .nav-menu.active { display: flex; }
+            .nav-links { flex-direction: column; gap: 20px; width: 100%; }
+            #menu-toggle { display: block; }
+            .features-grid, .testimonial-carousel { grid-template-columns: 1fr 1fr; }
+            .education-grid { grid-template-columns: 1fr; }
+            .calculator-container { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .features-grid, .testimonial-carousel { grid-template-columns: 1fr; }
+            .newsletter-content { grid-template-columns: 1fr; text-align: center; }
+            .newsletter-content img { margin: 0 auto 30px auto; }
+        }
+    </style>
+</head>
+<body>
+    
+    <header id="main-header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo"><i class="fas fa-chart-pie"></i> FintrackAI</a>
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="#features">Fitur</a></li>
+                        <li><a href="#education">Edukasi</a></li>
+                        <li><a href="#tools">Tools</a></li>
+                        <li><a href="#pricing">Harga</a></li>
+                    </ul>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <i class="fas fa-sun theme-switcher" id="theme-switcher"></i>
+                    <i class="fas fa-bars" id="menu-toggle"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero">
+            <div class="container">
+                <h1 data-aos="fade-up">Kendalikan Keuanganmu.<br>Mulai Hari Ini.</h1>
+                <p data-aos="fade-up" data-aos-delay="100">Catat pengeluaran, rencanakan masa depan, dan belajar investasi dengan bantuan AI.</p>
+                <div class="hero-cta" data-aos="fade-up" data-aos-delay="200">
+                    <a href="#pricing" class="btn btn-primary">Coba Gratis Sekarang</a>
+                    <a href="#" class="btn btn-secondary">Lihat Demo <i class="fas fa-play-circle" style="margin-left: 5px;"></i></a>
+                </div>
+                <div class="dashboard-mockup" data-aos="zoom-in-up" data-aos-delay="300">
+                    <img src="https://i.ibb.co/L5w2R0T/fintrack-dashboard.png" alt="FintrackAI Dashboard Mockup">
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Bar -->
+        <section id="security" style="padding-top: 0;">
+            <div class="container">
+                <div class="security-content" data-aos="fade-up">
+                    <div class="security-item"><i class="fas fa-lock"></i> Enkripsi SSL 256-bit</div>
+                    <div class="security-item"><i class="fas fa-shield-alt"></i> GDPR Ready</div>
+                    <h4 style="color: var(--subtle-text); text-align: center;">Data kamu 100% aman bersama FintrackAI</h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">Didesain untuk <span style="color: var(--light-blue);">Merdeka Finansial</span></h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Kami menyediakan semua yang kamu butuhkan untuk mengambil keputusan keuangan yang lebih cerdas.</p>
+                <div class="features-grid">
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <i class="fas fa-brain icon"></i>
+                        <h3>Smart Budgeting</h3>
+                        <p>AI kami akan menganalisis pemasukanmu dan merekomendasikan alokasi budget yang ideal untuk tabungan, investasi, dan gaya hidup.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <i class="fas fa-receipt icon"></i>
+                        <h3>Auto Expense Tracker</h3>
+                        <p>Hubungkan akun e-wallet atau bank untuk mencatat semua pengeluaran secara otomatis. Tidak ada lagi pencatatan manual.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                        <i class="fas fa-chart-line icon"></i>
+                        <h3>Investment Simulator</h3>
+                        <p>Belajar investasi tanpa risiko. Coba simulasikan keuntungan di saham, kripto, atau emas dengan data pasar yang riil.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Education Section -->
+        <section id="education">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">Tingkatkan <span style="color: var(--pastel-green);">Literasi Keuanganmu</span></h2>
+                <div class="education-grid" data-aos="fade-up" data-aos-delay="100">
+                    <div class="latest-articles">
+                        <h3>Artikel Terbaru</h3>
+                        <div class="article-card">
+                            <img src="https://i.ibb.co/yQjK3V7/article1.png" alt="Ilustrasi Dana Darurat">
+                            <div><h4>Pentingnya Dana Darurat di Usia 20-an</h4><p>Pelajari cara membangun fondasi keuangan yang kuat.</p></div>
+                        </div>
+                        <div class="article-card">
+                            <img src="https://i.ibb.co/mHq3yNq/article2.png" alt="Ilustrasi Investasi">
+                            <div><h4>Membedah Saham vs. Kripto: Mana Untukmu?</h4><p>Panduan lengkap untuk investor pemula.</p></div>
+                        </div>
+                    </div>
+                    <div class="video-course-card">
+                        <img src="https://i.ibb.co/JqjT2Wf/video-course.png" alt="Video Course Thumbnail">
+                        <h4>Mini Course: Investasi 101</h4>
+                        <p>Tonton 5 video pendek kami dan mulailah perjalanan investasimu dengan percaya diri.</p>
+                        <a href="#" class="btn btn-primary" style="width: 100%; text-align:center; margin-top:15px;">Mulai Belajar</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Section (Kalkulator Investasi) -->
+        <section id="tools">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">Kalkulator Investasi (SIP)</h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Simulasikan potensi pertumbuhan investasimu dengan berinvestasi secara rutin setiap bulan.</p>
+                <div class="calculator-container" data-aos="fade-up" data-aos-delay="200">
+                    <div class="calculator-form">
+                        <div class="form-group">
+                            <label for="monthly-investment">Investasi Bulanan (Rp)</label>
+                            <input type="number" id="monthly-investment" value="1000000">
+                        </div>
+                        <div class="form-group">
+                            <label for="annual-return">Estimasi Return Tahunan (%)</label>
+                            <input type="number" id="annual-return" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="time-period">Jangka Waktu (Tahun)</label>
+                            <input type="number" id="time-period" value="10">
+                        </div>
+                        <button class="btn btn-primary" id="calculate-btn" style="width: 100%;">Hitung</button>
+                    </div>
+                    <div class="calculator-result">
+                        <h3>Total Nilai Investasi</h3>
+                        <h2 class="total-value" id="total-value">Rp0</h2>
+                        <div class="result-details">
+                            <p><span>Total Dana Diinvestasikan</span> <span id="total-invested">Rp0</span></p>
+                            <p><span>Estimasi Keuntungan</span> <span id="total-profit">Rp0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  
